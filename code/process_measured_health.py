@@ -7,6 +7,31 @@ import matplotlib.patches as mpatches
 import matplotlib.lines as mlines
 plt.rcParams['pdf.fonttype'] = 42
 plt.rcParams['ps.fonttype'] = 42
+plt.rcParams['figure.figsize'] = [15.0,9.0]
+plt.rcParams['xtick.direction']='inout'
+plt.rcParams['ytick.direction']='inout'
+plt.rcParams['axes.spines.top']=False
+plt.rcParams['axes.spines.right']=False
+plt.rcParams['lines.dash_capstyle']='round'
+plt.rcParams['lines.solid_capstyle']='round'
+plt.rcParams['savefig.transparent']=True
+plt.rcParams['legend.frameon']=False
+
+plt.rcParams['axes.labelpad']=15.0
+plt.rcParams['savefig.transparent']=True
+plt.rcParams['legend.labelspacing']=.5
+plt.rcParams['lines.linewidth']=3
+plt.rcParams['xtick.labelsize']=16
+plt.rcParams['ytick.labelsize']=16
+plt.rcParams['xtick.major.pad'] = 9
+plt.rcParams['ytick.major.pad'] = 9
+
+
+
+
+
+
+
 
 
 
@@ -106,32 +131,27 @@ def cohort_survival_curve(df, cohort_info=None,make_labels=True,bin_width_days=1
 	cohort_mins = [numpy.argmin(numpy.abs(life_times - cohort_min)) for cohort_min in cohort_mins]  
 
 	
-	plt.plot(life_times[:cohort_mins[0] + 1], cumulative_life[:cohort_mins[0] + 1], linewidth = 4, color = 'black')
+	plt.plot(life_times[:cohort_mins[0] + 1], cumulative_life[:cohort_mins[0] + 1], color = 'black')
 	for i in range(0, len(cohort_mins) - 1):
 			
-		plt.plot(life_times[cohort_mins[i]: cohort_mins[i+1] + 1], cumulative_life[cohort_mins[i]: cohort_mins[i+1] + 1], linewidth = 4, color = my_colors[i])
+		plt.plot(life_times[cohort_mins[i]: cohort_mins[i+1] + 1], cumulative_life[cohort_mins[i]: cohort_mins[i+1] + 1], color = my_colors[i])
 		
-		plt.plot(life_times[cohort_mins[-1]:], cumulative_life[cohort_mins[-1]:], linewidth = 4, color = my_colors[-1])
+		plt.plot(life_times[cohort_mins[-1]:], cumulative_life[cohort_mins[-1]:], color = my_colors[-1])
 	plt.style.use('seaborn-white')
 	
-	plt.title('Survival curve', y=1.05, fontdict={'size':26,'family':'calibri','weight':'bold'})
+	plt.title('Survival curve', y=1.05, fontdict={'size':26,'weight':'bold', 'family':'calibri'})
 	plt.xlabel('Lifespan (days)', fontdict={'size':20,'family':'calibri'})
 	plt.ylabel('Survival (%)',fontdict={'size':20,'family':'calibri'})
-	axis=plt.gca()
-	axis.spines['right'].set_visible(False)
-	axis.spines['top'].set_visible(False)
 	plt.xlim([3,lifespans.max()//1+1])
 	plt.ylim([0.0, 1.1])
 
 	ftext="mean lifespan="+(str)(round(lifespans.mean(),1)) + " days"
 	even_more_text="median lifespan = " + (str)(round(numpy.percentile(lifespans,50),1)) + " days"
 	more_text="n= " + (str)(lifespans.size)
-	plt.figtext(.7,.8,ftext,fontsize=20,ha='left',family='calibri')
-	plt.figtext(.8, .2, more_text, fontsize=20, ha='left', family='calibri')
-	plt.figtext(.7, .75, even_more_text, fontsize=20, ha='left',family='calibri')
-	fig_size = plt.rcParams["figure.figsize"]
-	fig_size[0] = 15
-	fig_size[1] = 9
+	plt.figtext(.7,.8,ftext,fontsize=20,ha='left')
+	plt.figtext(.8, .2, more_text, fontsize=20, ha='left')
+	plt.figtext(.7, .75, even_more_text, fontsize=20, ha='left')
+
 
 	plt.gcf()
 	plt.savefig(df.save_directory+'/Survival_curve.pdf')
@@ -164,12 +184,9 @@ def cohort_histogram(df,cohort_info=None,make_labels=True,bin_width_days=2):
 	bin_width=2
 	plt.style.use('seaborn-white')
 	
-	plt.title('Cohorts across distribution of lifespans', y=1.05, fontdict={'size':26,'family':'calibri','weight':'bold'})
+	plt.title('Cohorts across distribution of lifespans', y=1.05,fontdict={'size':26, 'family':'calibri', 'weight':'bold'})
 	plt.xlabel('Lifespan (days)', fontdict={'size':20,'family':'calibri'})
 	plt.ylabel('Number of individuals',fontdict={'size':20,'family':'calibri'})
-	axis=plt.gca()
-	axis.spines['right'].set_visible(False)
-	axis.spines['top'].set_visible(False)
 	plt.xlim(lifespans.min()-2,lifespans.max()+2)
 	
 	#more_text='n =  '
@@ -184,10 +201,6 @@ def cohort_histogram(df,cohort_info=None,make_labels=True,bin_width_days=2):
 	
 
 
-	fig_size = plt.rcParams["figure.figsize"]
-	fig_size[0] = 15
-	fig_size[1] = 9
-	plt.rcParams["figure.figsize"] = fig_size
 	plt.savefig(df.save_directory+'/'+'lifespanhist.pdf')	
 	plt.show()
 	plt.gcf().clf	
@@ -286,12 +299,10 @@ def correlate_two_measures(measure1, measure2, first_day, last_day,miRNA,complet
 		x_label="Mean "+miRNA + "::GFP expression ( "+terms[measure1]+ " )"
 		y_label="Mean "+ terms[measure2]
 		save_name= "Mean "+miRNA + " expression "+ (str)(days[i])+ " dph " + measure1+measure2
-		plt.title(title,y=1.05,fontdict={'size':26,'family':'calibri','weight':'bold'})
+		plt.title(title,y=1.05,fontdict={'size':26,'weight':'bold','family':'calibri'})
 		plt.ylabel(y_label,fontdict={'size':20,'family':'calibri'})
 		plt.xlabel(x_label,fontdict={'size':20,'family':'calibri'})
-		axis=plt.gca()
-		axis.spines['right'].set_visible(False)
-		axis.spines['top'].set_visible(False)
+	
 	
 		if pearson[1]<.00001:
 			p="p<.00001"
@@ -306,14 +317,11 @@ def correlate_two_measures(measure1, measure2, first_day, last_day,miRNA,complet
 		gtext=r'$\rho$'+" = "+(str)(round(spearman[0],3))+" "+spearman_p
 		more_text="n= " + (str)(len(means1[i]))
 	
-		plt.figtext(.15,.85,ftext,fontsize=20,ha='left', family='calibri')
-		plt.figtext(.15,.8,gtext,fontsize=20,ha='left',family='calibri')
-		plt.figtext(.8, .2, more_text, fontsize=20, ha='left',family='calibri')
+		plt.figtext(.15,.85,ftext,fontsize=20,ha='left')
+		plt.figtext(.15,.8,gtext,fontsize=20,ha='left')
+		plt.figtext(.8, .2, more_text, fontsize=20, ha='left')
 	
-		fig_size = plt.rcParams["figure.figsize"]
-		fig_size[0] = 15
-		fig_size[1] = 9
-		plt.rcParams["figure.figsize"] = fig_size
+		
 	
 		plt.gcf()
 		plt.savefig(complete_worm_df.save_directory+'/'+save_name+'.pdf')
@@ -331,21 +339,16 @@ def plot_CVs(first_day,last_day,measure, miRNA, complete_worm_df,show=False,resc
 	cvs,days=get_CVs(measure,first_day,last_day,miRNA,complete_worm_df,rescale)
 	plt.style.use('seaborn-white')
 	plt.scatter(days,cvs,c='indigo',marker='o',s=50,edgecolor='indigo')
-	plt.plot(days,cvs, c='indigo',linewidth=2.0,linestyle='--')
-	plt.title('Coefficient of variation of '+miRNA + '::GFP expression ' + '('+ terms[measure[0]]+')'+ ' vs. timepoint', y=1.05, fontdict={'size':26,'family':'calibri','weight':'bold'})
+	plt.plot(days,cvs, c='indigo',linestyle='--')
+	plt.title('Coefficient of variation of '+miRNA + '::GFP expression ' + '('+ terms[measure[0]]+')'+ ' vs. timepoint', y=1.05, fontdict={'size':26,'weight':'bold','family':'calibri'})
 	plt.xlabel('Timepoint (day post-hatch)', fontdict={'size':20,'family':'calibri'})
 	plt.ylabel('Coefficient of variation',fontdict={'size':20,'family':'calibri'})
-	axis=plt.gca()
-	axis.spines['right'].set_visible(False)
-	axis.spines['top'].set_visible(False)
+
 	ymin, ymax = plt.ylim()
 
 	xmin,xmax=plt.xlim()
 	plt.xlim(days[0]-.5,days[-1]+.5)
-	fig_size = plt.rcParams["figure.figsize"]
-	fig_size[0] = 15
-	fig_size[1] = 9
-	plt.rcParams["figure.figsize"] = fig_size
+
 	plt.gcf()
 	
 	plt.savefig(complete_worm_df.save_directory+'/'+'CVtrajectories'+measure[0]+'.pdf')	
@@ -405,23 +408,18 @@ def plot_all_spreads(all_measures,first_day,last_day, miRNA, complete_worm_df,sh
 def plot_spread(means,measure,complete_worm_df,day, miRNA,show=False):
 	plt.style.use('seaborn-white')
 	plt.hist(means, facecolor='indigo')
-	plt.title('Distribution of '+miRNA + ' expression ' + '('+ terms[measure]+')'+' at '+ (str)(day) + ' dph', y=1.05, fontdict={'size':26,'family':'calibri','weight':'bold'})
+	plt.title('Distribution of '+miRNA + ' expression ' + '('+ terms[measure]+')'+' at '+ (str)(day) + ' dph', y=1.05, fontdict={'size':26,'weight':'bold','family':'calibri'})
 	plt.xlabel(miRNA + ' expression ' + '('+ terms[measure]+')', fontdict={'size':20,'family':'calibri'})
 	plt.ylabel('Frequency',fontdict={'size':20,'family':'calibri'})
-	axis=plt.gca()
-	axis.spines['right'].set_visible(False)
-	axis.spines['top'].set_visible(False)
+
 	ymin, ymax = plt.ylim()
 	xmin,xmax=plt.xlim()
-	fig_size = plt.rcParams["figure.figsize"]
-	fig_size[0] = 15
-	fig_size[1] = 9
-	plt.rcParams["figure.figsize"] = fig_size
+	
 	cv=round(numpy.std(means)/numpy.mean(means),2)
 	plt.ylim(ymin,ymax+5)
 	plt.xlim(xmin-numpy.std(means),xmax+numpy.std(means))
 	more_text="coefficient of variation = " + (str)(cv)
-	plt.figtext(.2, .8, more_text, fontsize=20, ha='left',family='calibri')
+	plt.figtext(.2, .8, more_text, fontsize=20, ha='left')
 	plt.gcf()
 
 	plt.savefig(complete_worm_df.save_directory+'/'+'Histogram '+measure+" at day "+(str)(day)+'.pdf')
@@ -444,19 +442,19 @@ def make_aggregate_plot(measures,first_day,last_day,miRNA,complete_worm_df, num_
 	
 	patches=[]
 	for i in range(0, len(ranked_measures)):
-		patches.append(mlines.Line2D([],[],color=color_terms[ranked_measures[i]],label=terms[ranked_measures[i]],marker=',',linewidth=4.0))
+		patches.append(mlines.Line2D([],[],color=color_terms[ranked_measures[i]],label=terms[ranked_measures[i]],marker=','))
 	
 	
 	for i in range(0,len(ranked_measures)):
-		plt.plot(days, extra_ranked_correlations[i], color=color_terms[ranked_measures[i]],linestyle='--',linewidth=4.0)
+		plt.plot(days, extra_ranked_correlations[i], color=color_terms[ranked_measures[i]],linestyle='--')
 		plt.scatter(days,extra_ranked_correlations[i],c=color_terms[ranked_measures[i]],marker='o',s=50,edgecolor=color_terms[ranked_measures[i]])
 	
-	plt.legend(handles=patches,loc='best', prop={'size':18,'family':'calibri'},frameon=True,fancybox=True,shadow=True,framealpha=.9,borderpad=1,labelspacing=.5,borderaxespad=1)
+	plt.legend(handles=patches,loc='best', prop={'size':18},labelspacing=.5)
 	
 	if len(control_for)>0:
-		plt.title('Correlation of '+miRNA +'::GFP expression with lifespan vs. timepoint measured, controlled for '+terms[control_for], y=1.05,fontdict={'size':26, 'family':'calibri','weight':'bold'})
+		plt.title('Correlation of '+miRNA +' expression with lifespan vs. timepoint measured, controlled for '+terms[control_for], y=1.05,fontdict={'size':26, 'weight':'bold','family':'calibri'})
 	else:
-		plt.title('Correlation of '+miRNA +'::GFP expression with lifespan vs. timepoint measured', y=1.05,fontdict={'size':26, 'family':'calibri','weight':'bold'})
+		plt.title('Correlation of '+miRNA +' expression with lifespan vs. timepoint measured', y=1.05,fontdict={'size':26,'weight':'bold','family':'calibri'})
 	
 	ymin, ymax = plt.ylim()
 	plt.ylim(0,.5)
@@ -465,15 +463,10 @@ def make_aggregate_plot(measures,first_day,last_day,miRNA,complete_worm_df, num_
 	xmin,xmax=plt.xlim()
 	plt.xlim(days[0]-.5,days[-1]+.5)
 
-	plt.xlabel('Timepoint (day post-hatch)', fontdict={'size':20,'family':'calibri'},labelpad=10)
-	plt.ylabel('Coefficient of determination ('+"$r^{2}$"+')', fontdict={'size':20,'family':'calibri'},labelpad=10)
-	axis=plt.gca()
-	axis.spines['right'].set_visible(False)
-	axis.spines['top'].set_visible(False)
-	fig_size = plt.rcParams["figure.figsize"]
-	fig_size[0] = 18
-	fig_size[1] = 12
-	plt.rcParams["figure.figsize"] = fig_size
+	plt.xlabel('Timepoint (day post-hatch)', fontdict={'size':20,'family':'calibri'})
+	plt.ylabel('Coefficient of determination ('+"$r^{2}$"+')', fontdict={'size':20,'family':'calibri'})
+
+
 	plt.style.use('seaborn-white')
 	plt.gcf()
 	save_name='Top '+ (str)(num_measures)+' ' +control_for+' correlationtrajectories'
@@ -546,7 +539,7 @@ def plot_correlations(first_day,last_day,measure, miRNA, complete_worm_df,show=F
 	print("deleted "+(str)(round(100*(len(deleted_worms)/len(worms)),1))+" percent of worms")	
 	plt.style.use('seaborn-white')
 	plt.scatter(days,correlations,c=color_terms[measure[0]],marker='o',s=50,edgecolor=color_terms[measure[0]])
-	plt.plot(days,correlations, c=color_terms[measure[0]],linewidth=4.0,linestyle='--')
+	plt.plot(days,correlations, c=color_terms[measure[0]],linestyle='--')
 	
 	p_x=[]
 	p_y=[]
@@ -556,22 +549,17 @@ def plot_correlations(first_day,last_day,measure, miRNA, complete_worm_df,show=F
 			p_x.append(days[i])
 	plt.scatter(p_x,p_y,marker=(6,2,0),color=color_terms[measure[0]],s=50)
 	if control_for:
-		plt.title('Correlation of '+miRNA + '::GFP expression ' + '('+ terms[measure[0]]+')'+ ' with lifespan vs. timepoint, controlled for '+ terms[control_for], y=1.05, fontdict={'size':26,'family':'calibri','weight':'bold'})	
+		plt.title('Correlation of '+miRNA + '::GFP expression ' + '('+ terms[measure[0]]+')'+ ' with lifespan vs. timepoint, controlled for '+ terms[control_for], y=1.05, fontdict={'size':26,'weight':'bold','family':'calibri'})	
 	else:
-		plt.title('Correlation of '+miRNA + '::GFP expression ' + '('+ terms[measure[0]]+')'+ ' with lifespan vs. timepoint', y=1.05, fontdict={'size':26,'family':'calibri','weight':'bold'})
+		plt.title('Correlation of '+miRNA + '::GFP expression ' + '('+ terms[measure[0]]+')'+ ' with lifespan vs. timepoint', y=1.05, fontdict={'size':26,'weight':'bold','family':'calibri'})
 	plt.xlabel('Timepoint (day post-hatch)', fontdict={'size':20,'family':'calibri'})
 	plt.ylabel('Coefficient of determination ('+"$r^{2}$"+')',fontdict={'size':20,'family':'calibri'})
-	axis=plt.gca()
-	axis.spines['right'].set_visible(False)
-	axis.spines['top'].set_visible(False)
+
 	ymin, ymax = plt.ylim()
 	plt.ylim(0,ymax+.02)
 	xmin,xmax=plt.xlim()
 	plt.xlim(days[0]-.5,days[-1]+.5)
-	fig_size = plt.rcParams["figure.figsize"]
-	fig_size[0] = 15
-	fig_size[1] = 9
-	plt.rcParams["figure.figsize"] = fig_size
+
 	plt.gcf()
 	if control_for:
 		plt.savefig(complete_worm_df.save_directory+'/'+'Correlationtrajectories'+measure[0]+' controlledfor '+ control_for[0]+'.pdf')
@@ -614,6 +602,9 @@ def make_scatter_plot(means, lifespans, measure, day, miRNA, complete_worm_df,sh
 
 	life_cohorts, bin_lifes, my_bins, my_colors=sd.life_cohort_bins(complete_worm_df,bin_width_days=bin_width_days)
 
+	if len(rescale)>0:
+		my_bins=my_bins/numpy.median(sd.get_lifespans(complete_worm_df)/24)
+
 	pearson,spearman,yp=run_stats(means,lifespans)
 
 	if len(control_for)==0:
@@ -653,14 +644,12 @@ def make_scatter_plot(means, lifespans, measure, day, miRNA, complete_worm_df,sh
 		y_label="Lifespan residual (after regression on "+ terms[control_for] +")"	
 	if len(rescale)>0:
 		save_name=save_name+' rescaled'
-	plt.title(title,y=1.05,fontdict={'size':26,'family':'calibri','weight':'bold'})
+		x_label="Mean "+miRNA + "::GFP expression ( "+terms[measure]+ " )"+", rescaled to median"
+		y_label='Lifespan (days post-hatch), rescaled to median' 
+	plt.title(title,y=1.05,fontdict={'size':26,'weight':'bold','family':'calibri'})
 	plt.ylabel(y_label,fontdict={'size':20,'family':'calibri'})
 	plt.xlabel(x_label,fontdict={'size':20,'family':'calibri'})
-	
-	axis=plt.gca()
-	axis.spines['right'].set_visible(False)
-	axis.spines['top'].set_visible(False)
-	
+
 	if pearson[1]<.00001:
 		p="p<.00001"
 	else:
@@ -674,14 +663,11 @@ def make_scatter_plot(means, lifespans, measure, day, miRNA, complete_worm_df,sh
 	gtext=r'$\rho$'+" = "+(str)(round(spearman[0],3))+" "+spearman_p
 	more_text="n= " + (str)(len(means))
 	
-	plt.figtext(.15,.85,ftext,fontsize=20,ha='left', family='calibri')
-	plt.figtext(.15,.8,gtext,fontsize=20,ha='left',family='calibri')
-	plt.figtext(.8, .2, more_text, fontsize=20, ha='left',family='calibri')
+	plt.figtext(.15,.85,ftext,fontsize=20,ha='left')
+	plt.figtext(.15,.8,gtext,fontsize=20,ha='left')
+	plt.figtext(.8, .2, more_text, fontsize=20, ha='left')
 	
-	fig_size = plt.rcParams["figure.figsize"]
-	fig_size[0] = 15
-	fig_size[1] = 9
-	plt.rcParams["figure.figsize"] = fig_size
+
 	
 	plt.gcf()
 	plt.savefig(complete_worm_df.save_directory+'/'+save_name+'.pdf')
@@ -727,13 +713,17 @@ def run_rescaling(complete_worm_df,measure,first_day,last_day):
 	'''
 	means, days, lifespans, worms, deleted_worms=get_data(complete_worm_df,measure,first_day,last_day)
 	means=numpy.asarray(means)
+	lifespans=numpy.asarray(lifespans)
 	rescaled_means=numpy.empty(means.shape)
+	rescaled_lifespans=lifespans/numpy.median(lifespans)
 	for i in range(0,len(means)):
 		median=numpy.median(means[i])
 		for j in range(0,len(means[i])):
 			rescaled_means[i][j]=means[i][j]/median
+
+
 	
-	return rescaled_means,days,lifespans,worms,deleted_worms
+	return rescaled_means,days,rescaled_lifespans,worms,deleted_worms
 
 def get_data(complete_worm_df,measure,first_day,last_day,rescale=[]):
 	#changed select_times on 1/31/18 to be inclusive i.e. 2.0-5.99 dph. Previous version was 2.0 to 6.99 when given 6.0 as last_day argument
@@ -847,10 +837,8 @@ def measure_slopes(measure, complete_worm_df, first_day, last_day,miRNA,bin_widt
 				colors.append(rainbow_colors[j])
 
 	plt.style.use('seaborn-white')
-	axis=plt.gca()
-	axis.spines['right'].set_visible(False)
-	axis.spines['top'].set_visible(False)
-	plt.title(miRNA +"::GFP slope (days "+(str)(first_day)+" to "+ (str)(last_day)+")" +" vs. lifespan",fontdict={'size':26,'family':'calibri','weight':'bold'})
+	
+	plt.title(miRNA +"::GFP slope (days "+(str)(first_day)+" to "+ (str)(last_day)+")" +" vs. lifespan",fontdict={'size':26,'weight':'bold','family':'calibri'})
 	plt.xlabel("Slope of "+miRNA+ "::GFP ("+terms[measure]+")",fontdict={'size':20,'family':'calibri'})
 	plt.ylabel("Lifespan (days)",fontdict={'size':20,'family':'calibri'})
 	plt.scatter(slopes,lifespans,c=colors, edgecolors=colors,s=35,alpha=.7)
@@ -868,12 +856,8 @@ def measure_slopes(measure, complete_worm_df, first_day, last_day,miRNA,bin_widt
 	more_text="n= " + (str)(len(slopes))	
 	ftext="$r^{2}$ ="+(str)(round(correlation[0]**2,3))+" "+p
 	plt.figtext(.65,.8,ftext,fontsize=20,ha='left')
-	plt.figtext(.8, .2, more_text, fontsize=20, ha='left',family='calibri')
-	
-	#fig_size = plt.rcParams["figure.figsize"]
-	#fig_size[0] = 15
-	#fig_size[1] = 9
-	#plt.rcParams["figure.figsize"] = fig_size
+	plt.figtext(.8, .2, more_text, fontsize=20, ha='left')
+
 
 	plt.gcf()
 	plt.savefig(complete_worm_df.save_directory+'/'+'Slope '+ terms[measure] +(str)(first_day) +' to '+(str)(last_day)+' dph.pdf')	
@@ -901,24 +885,18 @@ def plot_survival_curve(complete_worm_df):
 		percent_alive.append((count/len(lifespans))*100)		
 	
 	plt.style.use('seaborn-white')
-	plt.plot(days,percent_alive, color='goldenrod',linewidth=2.0)
-	
-	axis=plt.gca()
-	axis.spines['right'].set_visible(False)
-	axis.spines['top'].set_visible(False)
-	plt.title("Survival curve",y=1.05,fontdict={'size':26,'family':'calibri','weight':'bold'})
+	plt.plot(days,percent_alive, color='goldenrod')
+
+	plt.title("Survival curve",y=1.05,fontdict={'size':26,'weight':'bold','family':'calibri'})
 	plt.xlabel("Lifespan (days)",fontdict={'size':20,'family':'calibri'})
 	plt.ylabel("Survival (%)",fontdict={'size':20,'family':'calibri'})
 	ftext="mean lifespan="+(str)(round(lifespans.mean(),1)) + " days"
 	even_more_text="median lifespan = " + (str)(round(numpy.percentile(lifespans,50),1)) + " days"
 	more_text="n= " + (str)(lifespans.size)
-	plt.figtext(.5,.8,ftext,fontsize=20,ha='left',family='calibri')
-	plt.figtext(.8, .2, more_text, fontsize=20, ha='left', family='calibri')
-	plt.figtext(.5, .75, even_more_text, fontsize=20, ha='left',family='calibri')
-	fig_size = plt.rcParams["figure.figsize"]
-	fig_size[0] = 15
-	fig_size[1] = 9
-	plt.rcParams["figure.figsize"] = fig_size
+	plt.figtext(.5,.8,ftext,fontsize=20,ha='left')
+	plt.figtext(.8, .2, more_text, fontsize=20, ha='left')
+	plt.figtext(.5, .75, even_more_text, fontsize=20, ha='left')
+
 	plt.gcf()
 	plt.savefig(complete_worm_df.save_directory+'/Survival_curve.pdf')
 	plt.show()
@@ -950,18 +928,15 @@ def plot_smoothed_trajectories(data_directories,save_directory, measure, bin_wid
 		title="Average autofluorescence profiles of different lifespan cohorts"
 		y_label="Autofluorescence ("+measure+")" 	
 		save_name= "Average "+terms[measure]+" profiles"	
-	
-	axis=plt.gca()
-	axis.spines['right'].set_visible(False)
-	axis.spines['top'].set_visible(False)
-	plt.title(title,y=1.05,fontdict={'size':26,'family':'calibri', 'weight':'bold'})
+
+	plt.title(title,y=1.05,fontdict={'size':26, 'weight':'bold','family':'calibri'})
 	plt.ylabel(y_label, fontdict={'size':20,'family':'calibri'})
 	more_text='n =  '
 	
 	for i in range(0, len(life_cohorts)):
 		more_text=more_text+'       '+ (str)(len(life_cohorts[i]))
 
-	plt.figtext(.5, .2, more_text, fontsize=20, ha='left',family='calibri')
+	plt.figtext(.5, .2, more_text, fontsize=20, ha='left')
 	
 	for i in range(0, len(life_cohorts)):
 		cohort_data = smoothed_data[life_cohorts[i]]
@@ -974,13 +949,10 @@ def plot_smoothed_trajectories(data_directories,save_directory, measure, bin_wid
 		averages.append(mew)
 		
 	for i in range(0, len(life_cohorts)):
-		plt.plot(ages, averages[i], color=rainbow_colors[i],linewidth=2.0)
+		plt.plot(ages, averages[i], color=rainbow_colors[i])
 	ymin,ymax=plt.ylim()
 	plt.ylim(0,ymax+.1*ymax)	
-	fig_size = plt.rcParams["figure.figsize"]
-	fig_size[0] = 15
-	fig_size[1] = 9
-	plt.rcParams["figure.figsize"] = fig_size
+
 	
 	plt.gcf()
 	plt.savefig(complete_worm_df.save_directory+'/'+save_name+' smoothed.pdf')
@@ -1018,32 +990,24 @@ def plot_trajectories(data_directories,save_directory, measure,bin_width_days=2,
 	plt.style.use('seaborn-white')
 	plt.xlabel('Age (days)', fontdict={'size':20,'family':'calibri'})
 	
-	axis=plt.gca()
-	axis.spines['right'].set_visible(False)
-	axis.spines['top'].set_visible(False)
-	plt.title(title,y=1.05,fontdict={'size':26,'family':'calibri', 'weight':'bold'})
+	plt.title(title,y=1.05,fontdict={'size':26, 'weight':'bold','family':'calibri'})
 	plt.ylabel(y_label, fontdict={'size':20,'family':'calibri'})
 	more_text='n =  '
 
 	for i in range(0, len(life_cohorts)):
 		more_text=more_text+'       '+ (str)(len(life_cohorts[i]))
 
-	plt.figtext(.5, .2, more_text, fontsize=20, ha='left',family='calibri')
+	plt.figtext(.5, .2, more_text, fontsize=20, ha='left')
 	
 	for i in range(0, len(life_cohorts)):
 		averages.append(sd.cohort_trace(complete_worm_df,life_cohorts[i],measure,False))
 	
 	for i in range(0, len(life_cohorts)):
 		
-		plt.plot(ages, averages[i], color=rainbow_colors[i],linewidth=2.0)
+		plt.plot(ages, averages[i], color=rainbow_colors[i])
 		
 	save_name='Average'+measure+'profiles'	
 
-	fig_size = plt.rcParams["figure.figsize"]
-	fig_size[0] = 15
-	fig_size[1] = 9
-	plt.rcParams["figure.figsize"] = fig_size
-	
 	plt.gcf()
 	plt.savefig(complete_worm_df.save_directory+'/'+save_name+'.pdf')
 	plt.show(block=False)
